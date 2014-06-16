@@ -17,6 +17,10 @@ var db = mongojs(url, collections);
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
 	if (req.body.type == 'identify') {
+		console.log("FLAT 1", flattened);
+		flattened = JSON.stringify(flattened);
+		flattened = JSON.parse(flattened);
+		console.log("Flat 2", flattened);
 		db.identify.save(flattened);
 		db.identify.find(function (err, docs) {
 			console.log(docs);
