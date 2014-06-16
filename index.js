@@ -13,8 +13,6 @@ var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mong
 var collections = ['identify'];
 var db = mongojs(url, collections);
 
-db.identify.remove( {} );
-
 // post requests (HTTP)
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
