@@ -14,8 +14,9 @@ var db = mongojs(url, collections);
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
+	console.log('Request type', req.type);
+	console.log('Request body', req.body);
 	if (req.type == 'identify') {
-		console.log(req.body);
 	} else if (req.type == 'page') {
 
 	} //...
