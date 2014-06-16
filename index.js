@@ -13,6 +13,8 @@ var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mong
 var collections = ['identify'];
 var db = mongojs(url, collections);
 
+db.identify.remove( {} );
+
 // post requests (HTTP)
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
@@ -25,8 +27,12 @@ app.post('/', function (req, res) {
 });
 
 // get requests (HTTP)
-app.get('/', function (req, res) {
+app.get('/identify', function (req, res) {
 	res.send('TODO: Implement');
+});
+
+app.get('/', function (req, res) {
+	res.send('Ain\t nuttin.');
 });
 
 // start the server
