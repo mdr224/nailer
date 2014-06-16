@@ -16,12 +16,13 @@ var db = mongojs(url, collections);
 // post requests (HTTP)
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
-	if (req.body.type == 'identify') {
+	console.log(flattened);
+	/*if (req.body.type == 'identify') {
 		db.identify.save(flattened);
 		db.identify.find(function (err, docs) {
 			console.log(docs);
 		});
-	} //...
+	} //...*/
 	res.end();
 });
 
