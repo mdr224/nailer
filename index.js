@@ -14,11 +14,11 @@ var db = mongojs(url, collections);
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
-	console.log('Request type', req.type);
-	console.log('Request body', req.body);
-	if (req.type == 'identify') {
-	} else if (req.type == 'page') {
-
+	if (req.body.type == 'identify') {
+		db.identify.save(req.body.traits);
+		console.log(db.identify.find(function (err, docs) {
+			console.log(docs);
+		}));
 	} //...
 	res.end();
 });
