@@ -3,6 +3,7 @@ var connect = require('connect');
 var express = require('express');
 var mongojs = require('mongojs');
 var mongo = require('mongodb');
+var flat = require('flat');
 
 var app = express();
 
@@ -14,11 +15,12 @@ var db = mongojs(url, collections);
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
+	var flattened = flat.flatten(req.body);
 	if (req.body.type == 'identify') {
-		db.identify.save(req.body.traits);
-		console.log(db.identify.find(function (err, docs) {
+		db.identify.save(flattened);
+		db.identify.find(function (err, docs) {
 			console.log(docs);
-		}));
+		});
 	} //...
 	res.end();
 });
