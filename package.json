@@ -10,5 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.4.3"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/mdr224/nailer.git"
   }
 }
