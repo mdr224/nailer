@@ -4,15 +4,17 @@
   "description": "A heroku and mongodb application that acts with segmentio webhooks to provide a CSV file with contents specified by the user.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "Michael Rosenfeld",
   "license": "ISC",
   "dependencies": {
+    "connect": "^2.19.6",
     "express": "^4.4.3"
   },
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/mdr224/nailer.git"
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mdr224/nailer.git"
   }
 }
