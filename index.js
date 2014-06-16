@@ -1,17 +1,29 @@
+// initialization
 var connect = require('connect');
 var express = require('express');
+var mongojs = require('mongojs');
+var mongo = require('mongodb');
+
 var app = express();
 
 app.use(connect.json());
 
-// get requests (HTTP)
-app.get('/', function (req, res) {
-	res.send('TODO: Implement');
-});
+var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mongolab.com:33828/heroku_app26443906';
+var collections = ['identify', 'page'];
+var db = mongojs(url, collections);
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
-	console.log(request.body);
+	if (req.type == 'identify') {
+		console.log(req.body);
+	} else if (req.type == 'page') {
+
+	} //...
+});
+
+// get requests (HTTP)
+app.get('/', function (req, res) {
+	res.send('TODO: Implement');
 });
 
 // start the server
