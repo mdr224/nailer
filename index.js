@@ -19,6 +19,7 @@ app.post('/', function (req, res) {
 	} else if (req.type == 'page') {
 
 	} //...
+	res.end();
 });
 
 // get requests (HTTP)
