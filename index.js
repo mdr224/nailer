@@ -28,19 +28,25 @@ app.post('/', function (req, res) {
 	res.end();
 });
 
+// whyy does this not get caught above, is
+// the first argument not just a prefix?
 app.post('/identify', function (req, res) {
 	var begin = new Date(req.body.begin);
 	var end = new Date(req.body.end);
 	console.log ("searching between ", begin, end);
 
 	db.identify.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		if (err)
-			console.error(err);
-		else
-			console.log(doc);
-	});
+		if (err) console.error(err);
+		else {
+			res.set('Content-Type', 'text/csv');
+			var spawn = require('child_process').spawn;
+			var ls = spawn('mongoexport', [
+				'--db', 'lms', '--collection', 'databases',
+				'--fields', 'firstname,lastname,email',
+				'--csv']).stdout.pipe(res);
 
-	res.end();
+		}
+	});
 });
 
 // get requests (HTTP)
