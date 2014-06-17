@@ -15,7 +15,8 @@
     "fast-csv": "^0.4.1",
     "flat": "^1.2.1",
     "mongodb": "^1.4.6",
-    "mongojs": "^0.13.0"
+    "mongojs": "^0.13.0",
+    "mycha": "^0.6.2"
   },
   "repository": {
     "type": "git",
