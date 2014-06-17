@@ -30,9 +30,13 @@ app.post('/', function (req, res) {
 app.post('/identify', function (req, res) {
 	var begin = new Date(req.body.begin);
 	var end = new Date(req.body.end);
+	console.log ("searching between ", begin, end);
 
 	db.identify.find({created_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		console.log(doc);
+		if (err)
+			console.error(err);
+		else
+			console.log(doc);
 	});
 });
 
