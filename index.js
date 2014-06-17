@@ -4,35 +4,46 @@ var express = require('express');
 var mongojs = require('mongojs');
 var mongo = require('mongodb');
 var flat = require('flat');
+var fs = require('fs');
 
 var app = express();
 
 app.use(connect.json());
+app.use(connect.urlencoded());
+app.use(connect.multipart());
 
 var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mongolab.com:33828/heroku_app26443906';
 var collections = ['identify'];
 var db = mongojs(url, collections);
-
-db.identify.remove( {} );
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
 	if (req.body.type == 'identify') {
 		db.identify.save(flattened);
-		console.log("here");
-		db.identify.find(function (err, doc) {
-			console.log(doc);
-		});
 	} else if (req.body.type == 'page') {
 
 	}
 	res.end();
 });
 
+app.post('/identify', function (req, res) {
+	var begin = new Date(req.body.begin);
+	var end = new Date(req.body.end);
+
+	db.identify.find({created_on: {$gte: begin, $lt: end}}, function (err, doc) {
+		console.log(doc);
+	});
+});
+
 // get requests (HTTP)
 app.get('/identify', function (req, res) {
-	res.send('TODO: Implement');
+	fs.readFile('form.html', function (err, data) {
+		res.writeHead(200, {'Content-Type': 'text/html',
+							'Content-Length': data.length });
+		res.write(data);
+		res.end();
+	});
 });
 
 app.get('/', function (req, res) {
