@@ -1,9 +1,9 @@
 // initialization
-var express_csv = require('express-csv');
 var connect = require('connect');
 var express = require('express');
 var mongojs = require('mongojs');
 var mongo = require('mongodb');
+var fast = require('fast-csv');
 var flat = require('flat');
 var fs = require('fs');
 
@@ -39,7 +39,7 @@ app.post('/identify', function (req, res) {
 	db.identify.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
 		if (err) console.error(err);
 		else {
-			res.csv(doc, ["a", "b", "c", "d"]);
+			respondWithCSV(data, res);
 		}
 	});
 });
@@ -57,6 +57,12 @@ app.get('/identify', function (req, res) {
 app.get('/', function (req, res) {
 	res.send('Ain\t nuttin.');
 });
+
+// sending csv files back
+function respondWithCSV (data, response) {
+	response.writeHead(200, {'Content-Type': 'text/csv'});
+	fast.writeToStream(response, data);
+}
 
 // start the server
 var port = Number(process.env.PORT || 5000)
