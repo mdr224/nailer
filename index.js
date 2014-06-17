@@ -32,12 +32,14 @@ app.post('/identify', function (req, res) {
 	var end = new Date(req.body.end);
 	console.log ("searching between ", begin, end);
 
-	db.identify.find({created_on: {$gte: begin, $lt: end}}, function (err, doc) {
+	db.identify.find(function (err, doc) {
 		if (err)
 			console.error(err);
 		else
 			console.log(doc);
 	});
+
+	res.end();
 });
 
 // get requests (HTTP)
