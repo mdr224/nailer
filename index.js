@@ -19,6 +19,7 @@ var db = mongojs(url, collections);
 // post requests (HTTP)
 app.post('/', function (req, res) {
 	var flattened = flat.flatten(req.body);
+	flattened.created_on = new Date();
 	if (req.body.type == 'identify') {
 		db.identify.save(flattened);
 	} else if (req.body.type == 'page') {
@@ -32,7 +33,7 @@ app.post('/identify', function (req, res) {
 	var end = new Date(req.body.end);
 	console.log ("searching between ", begin, end);
 
-	db.identify.find({timestamp: {$gte: begin, $lt: end}}, function (err, doc) {
+	db.identify.find({created_on: {$gte: begin, $lt: end}}, function (err, doc) {
 		if (err)
 			console.error(err);
 		else
