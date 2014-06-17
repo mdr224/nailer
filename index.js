@@ -39,12 +39,7 @@ app.post('/identify', function (req, res) {
 	db.identify.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
 		if (err) console.error(err);
 		else {
-			console.log(data);
-			if (data != []) {
-				respondWithCSV(data, res);
-			} else {
-				res.end();
-			}
+			respondWithCSV(doc, res);
 		}
 	});
 });
