@@ -1,4 +1,5 @@
 // initialization
+var express_csv = require('express-csv');
 var connect = require('connect');
 var express = require('express');
 var mongojs = require('mongojs');
@@ -38,13 +39,7 @@ app.post('/identify', function (req, res) {
 	db.identify.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
 		if (err) console.error(err);
 		else {
-			res.set('Content-Type', 'text/csv');
-			var spawn = require('child_process').spawn;
-			var ls = spawn('mongoexport', [
-				'--db', 'lms', '--collection', 'databases',
-				'--fields', 'firstname,lastname,email',
-				'--csv']).stdout.pipe(res);
-
+			res.csv(doc);
 		}
 	});
 });
