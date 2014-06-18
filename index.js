@@ -43,14 +43,10 @@ app.post('/', function (req, res) {
 app.post('/alias', function (req, res) {
 	var begin = new Date(req.body.begin);
 	var end = new Date(req.body.end);
+	var user = parseInt(req.body.userid);
 	console.log ("searching in alias between ", begin, end);
 
-	db.alias.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		if (err) console.error(err);
-		else {
-			respondWithCSV(doc, res);
-		}
-	});
+	db.alias.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
 });
 
 app.post('/identify', function (req, res) {
@@ -58,12 +54,7 @@ app.post('/identify', function (req, res) {
 	var end = new Date(req.body.end);
 	console.log ("searching in identify between ", begin, end);
 
-	db.identify.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		if (err) console.error(err);
-		else {
-			respondWithCSV(doc, res);
-		}
-	});
+	db.identify.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
 });
 
 app.post('/page', function (req, res) {
@@ -71,12 +62,7 @@ app.post('/page', function (req, res) {
 	var end = new Date(req.body.end);
 	console.log ("searching in page between ", begin, end);
 
-	db.page.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		if (err) console.error(err);
-		else {
-			respondWithCSV(doc, res);
-		}
-	});
+	db.page.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
 });
 
 app.post('/track', function (req, res) {
@@ -84,12 +70,7 @@ app.post('/track', function (req, res) {
 	var end = new Date(req.body.end);
 	console.log ("searching in track between ", begin, end);
 
-	db.track.find({received_on: {$gte: begin, $lt: end}}, function (err, doc) {
-		if (err) console.error(err);
-		else {
-			respondWithCSV(doc, res);
-		}
-	});
+	db.track.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
 });
 
 // get requests (HTTP)
@@ -114,6 +95,16 @@ app.get('/', function (req, res) {
 });
 
 // sending responses back
+function csvCallback (response) {
+	return (function (err, doc) {
+		if (err) {
+			console.error(err);
+		} else {
+			respondWithCSV(doc, response);
+		}
+	});
+}
+
 function respondWithCSV (data, response) {
 	response.writeHead(200, {'Content-Type': 'text/csv'});
 	fast.writeToStream(response, data);
