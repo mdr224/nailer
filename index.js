@@ -90,7 +90,7 @@ function searchOptions (begin, end, userid) {
 	}
 
 	if (userid != '') {
-		options.userId = parseInt(userid);
+		options.userId = userid;
 	}
 
 	return options;
