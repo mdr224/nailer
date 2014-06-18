@@ -41,36 +41,19 @@ app.post('/', function (req, res) {
 // why does this not get caught above, is
 // the first argument not just a prefix?
 app.post('/alias', function (req, res) {
-	var begin = new Date(req.body.begin);
-	var end = new Date(req.body.end);
-	var user = parseInt(req.body.userid);
-	console.log ("searching in alias between ", begin, end);
-
-	db.alias.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
+	db.alias.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
 });
 
 app.post('/identify', function (req, res) {
-	var begin = new Date(req.body.begin);
-	var end = new Date(req.body.end);
-	console.log ("searching in identify between ", begin, end);
-
-	db.identify.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
+	db.identify.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
 });
 
 app.post('/page', function (req, res) {
-	var begin = new Date(req.body.begin);
-	var end = new Date(req.body.end);
-	console.log ("searching in page between ", begin, end);
-
-	db.page.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
+	db.page.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
 });
 
 app.post('/track', function (req, res) {
-	var begin = new Date(req.body.begin);
-	var end = new Date(req.body.end);
-	console.log ("searching in track between ", begin, end);
-
-	db.track.find({received_on: {$gte: begin, $lt: end}}, csvCallback(res));
+	db.track.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
 });
 
 // get requests (HTTP)
@@ -94,7 +77,25 @@ app.get('/', function (req, res) {
 	respondWithHTML('html/main.html', res);
 });
 
-// sending responses back
+// helper methods
+function searchOptions (begin, end, userid) {
+	var options = {}
+
+	if (begin != undefined && end != undefined) {
+		options.received_on = {$gte: new Date(begin), $lt: new Date(end)};
+	} else if (begin != undefined) {
+		options.received_on = {$gte: new Date(begin), $lt: new Date()};
+	} else if (end != undefined) {
+		options.received_on = {$gte: new Date(70, 1, 1, 0, 0, 0), $lt: new Date(end)};
+	}
+
+	if (userid != undefined) {
+		options.userId = userid;
+	}
+
+	return options;
+}
+
 function csvCallback (response) {
 	return (function (err, doc) {
 		if (err) {
@@ -105,6 +106,7 @@ function csvCallback (response) {
 	});
 }
 
+// sending responses back
 function respondWithCSV (data, response) {
 	response.writeHead(200, {'Content-Type': 'text/csv'});
 	fast.writeToStream(response, data);
