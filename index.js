@@ -89,8 +89,8 @@ function searchOptions (begin, end, userid) {
 		options.received_on = {$gte: new Date(70, 1, 1, 0, 0, 0), $lt: new Date(end)};
 	}
 
-	if (userid != undefined) {
-		options.userId = userid;
+	if (userid != '') {
+		options.userId = parseInt(userid);
 	}
 
 	return options;
