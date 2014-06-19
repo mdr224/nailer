@@ -79,29 +79,19 @@ app.get('/', function (req, res) {
 
 // helper methods
 function searchOptions (begin, end, userid) {
-	var options = {
-		received_on : undefined,
-		userId : undefined
-	};
+	var options = {};
 
 	if (begin != undefined && end != undefined) {
 		options.received_on = {$gte: new Date(begin), $lt: new Date(end)};
 	} else if (begin != undefined) {
-		options.received_on = {$gte: new Date(begin), $lt: new Date(2030, 1, 1, 0, 0, 0)};
+		options.received_on = {$gte: new Date(begin)};
 	} else if (end != undefined) {
-		options.received_on = {$gte: new Date(1970, 1, 1, 0, 0, 0), $lt: new Date(end)};
-	} else {
-		options.received_on = {$gte: new Date(1970, 1, 1, 0, 0, 0), $lt: new Date(2030, 1, 1, 0, 0, 0)};
+		options.received_on = {$lt: new Date(end)};
 	}
 
 	if (userid != '') {
 		options.userId = userid;
 	}
-
-	console.log(options.received_on);
-	console.log(options.received_on.gte);
-	console.log(options.received_on.lt);
-	console.log(options.userId);
 
 	return options;
 }
