@@ -19,10 +19,10 @@ var collections = ['alias', 'identify', 'page', 'track'];
 var db = mongojs(url, collections);
 
 // NOTE: TEMPORARY
-db.alias.remove( {} );
+/*db.alias.remove( {} );
 db.identify.remove( {} );
 db.page.remove( {} );
-db.track.remove( {} );
+db.track.remove( {} );*/
 
 // post requests (HTTP)
 app.post('/', function (req, res) {
@@ -79,19 +79,29 @@ app.get('/', function (req, res) {
 
 // helper methods
 function searchOptions (begin, end, userid) {
-	var options = {};
+	var options = {
+		received_on : undefined,
+		userId : undefined
+	};
 
 	if (begin != undefined && end != undefined) {
 		options.received_on = {$gte: new Date(begin), $lt: new Date(end)};
 	} else if (begin != undefined) {
-		options.received_on = {$gte: new Date(begin), $lt: new Date(2050, 1, 1, 0, 0, 0)};
+		options.received_on = {$gte: new Date(begin), $lt: new Date(2030, 1, 1, 0, 0, 0)};
 	} else if (end != undefined) {
 		options.received_on = {$gte: new Date(1970, 1, 1, 0, 0, 0), $lt: new Date(end)};
+	} else {
+		options.received_on = {$gte: new Date(1970, 1, 1, 0, 0, 0), $lt: new Date(2030, 1, 1, 0, 0, 0)};
 	}
 
 	if (userid != '') {
 		options.userId = userid;
 	}
+
+	console.log(options.received_on);
+	console.log(options.received_on.gte);
+	console.log(options.received_on.lt);
+	console.log(options.userId);
 
 	return options;
 }
