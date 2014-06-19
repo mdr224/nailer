@@ -81,8 +81,8 @@ app.get('/', function (req, res) {
 function searchOptions (begin, end, userid) {
 	var options = {};
 
-	var earliest = new Date(1970);
-	var latest = new Date(2050);
+	var earliest = new Date(1980);
+	var latest = new Date(2020);
 	console.log(earliest);
 	console.log(latest);
 
