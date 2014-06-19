@@ -81,26 +81,18 @@ app.get('/', function (req, res) {
 function searchOptions (begin, end, userid) {
 	var options = {};
 
-	var earliest = new Date(1980);
-	var latest = new Date(2020);
-	console.log(earliest);
-	console.log(latest);
-
-	if (begin != undefined && end != undefined) {
-		options.received_on = {$gte: new Date(begin), $lt: new Date(end)};
-	} else if (begin != undefined) {
-		options.received_on = {$gte: new Date(begin), $lt: latest};
-	} else if (end != undefined) {
-		options.received_on = {$gte: earliest, $lt: new Date(end)};
-	} else {
-		options.received_on = {$gte: earliest, $lt: latest};
+	if (begin != '' && end != '') {
+	} else if (begin != '') {
+		options.received_on = {$gte: new Date(begin)};
+	} else if (end != '') {
+		options.received_on = {$lt: new Date(end)};
 	}
-
-	console.log(options.received_on);
 
 	if (userid != '') {
 		options.userId = userid;
 	}
+
+	console.log(options.received_on);
 
 	return options;
 }
