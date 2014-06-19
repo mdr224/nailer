@@ -92,8 +92,6 @@ function searchOptions (begin, end, userid) {
 		options.userId = userid;
 	}
 
-	console.log(options.received_on);
-
 	return options;
 }
 
