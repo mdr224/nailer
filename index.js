@@ -79,10 +79,7 @@ app.get('/', function (req, res) {
 
 // helper methods
 function searchOptions (begin, end, userid) {
-	var options = {
-		received_on : undefined
-		userId : undefined
-	}
+	var options = { };
 
 	if (begin != undefined && end != undefined) {
 		options.received_on = {$gte: new Date(begin), $lt: new Date(end)};
