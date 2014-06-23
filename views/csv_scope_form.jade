@@ -1,0 +1,22 @@
+extend layout
+block content
+  script.
+    $(document).ready(function () {
+      $("input[name='begin']").datepicker()
+      $("input[name='end']").datepicker()
+    });
+  form(action="#{target}" method="post" class="form-horizontal")
+    .control-group
+      label(for='begin' class="control-label") Start
+      .controls
+        input(type="date" name="begin")
+    .control-group
+      label(for='end' class="control-label") End
+      .controls
+        input(type="date" name="end")
+    .control-group
+      label(for='userid' class="control-label") UserId 
+      .controls
+        input(type="text" name="userid")
+    br
+    input(type="submit" name="Submit" class="btn btn-primary")

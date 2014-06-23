@@ -12,6 +12,7 @@
   "dependencies": {
     "connect": "^2.19.6",
     "express": "^4.4.3",
+    "jade": "*",
     "fast-csv": "^0.4.1",
     "flat": "^1.2.1",
     "mongodb": "^1.4.6",
