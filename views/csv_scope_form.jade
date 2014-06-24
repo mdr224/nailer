@@ -9,11 +9,18 @@ block content
     .control-group
       label(for='begin' class="control-label") Start
       .controls
-        input(type="date" name="begin")
+        input(type="datetime" name="begin")
     .control-group
       label(for='end' class="control-label") End
       .controls
-        input(type="date" name="end")
+        input(type="datetime" name="end")
+    .control-group
+      label(for='timezone' class="control-label") Timezone 
+      .controls
+        select(name="timezone")
+          option America/New_York
+          option America/Los_Angeles
+
     .control-group
       label(for='userid' class="control-label") UserId 
       .controls
