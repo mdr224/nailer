@@ -3,6 +3,7 @@ var connect = require('connect');
 var express = require('express');
 var mongojs = require('mongojs');
 var mongo = require('mongodb');
+var moment = require('moment-timezone');
 var fast = require('fast-csv');
 var flat = require('flat');
 var fs = require('fs');
@@ -45,19 +46,27 @@ app.post('/', function (req, res) {
 // why does this not get caught above, is
 // the first argument not just a prefix?
 app.post('/alias', function (req, res) {
-	db.alias.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
+  db.alias.find(
+    searchOptions(req.body.begin, req.body.end, req.body.userid, req.body.timezone),
+    csvCallback(res, req.body.timezone));
 });
 
 app.post('/identify', function (req, res) {
-	db.identify.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
+  db.identify.find(
+    searchOptions(req.body.begin, req.body.end, req.body.userid, req.body.timezone),
+    csvCallback(res, req.body.timezone));
 });
 
 app.post('/page', function (req, res) {
-	db.page.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
+	db.page.find(
+    searchOptions(req.body.begin, req.body.end, req.body.userid, req.body.timezone),
+    csvCallback(res, req.body.timezone));
 });
 
 app.post('/track', function (req, res) {
-	db.track.find(searchOptions(req.body.begin, req.body.end, req.body.userid), csvCallback(res));
+	db.track.find(
+    searchOptions(req.body.begin, req.body.end, req.body.userid, req.body.timezone),
+    csvCallback(res, req.body.timezone));
 });
 
 // get requests (HTTP)
@@ -87,14 +96,24 @@ app.get('/', function (req, res) {
 });
 
 // helper methods
-function searchOptions (begin, end, userid) {
+function searchOptions (begin, end, userid, timezone) {
 	var options = {};
 
+  if (begin != '')
+    begin_utc = new Date(moment.tz(begin, timezone).utc())
+
+  if (end != '')
+    end_utc = new Date(moment.tz(end, timezone).utc())
+
 	if (begin != '' && end != '') {
+		options.received_on = {
+      $gte: begin_utc,
+      $lte: end_utc 
+    };
 	} else if (begin != '') {
-		options.received_on = {$gte: new Date(begin)};
-	} else if (end != '') {
-		options.received_on = {$lt: new Date(end)};
+		options.received_on = {$gte: begin_utc};
+  } else if (end != '') {
+		options.received_on = {$lt: end_utc};
 	}
 
 	if (userid != '') {
@@ -104,20 +123,29 @@ function searchOptions (begin, end, userid) {
 	return options;
 }
 
-function csvCallback (response) {
+function csvCallback (response, timezone) {
 	return (function (err, doc) {
 		if (err) {
 			console.error(err);
 		} else {
-			respondWithCSV(doc, response);
+			respondWithCSV(doc, response, timezone);
 		}
 	});
 }
 
 // sending responses back
-function respondWithCSV (data, response) {
+function respondWithCSV (data, response, timezone) {
 	response.writeHead(200, {'Content-Type': 'text/csv'});
-	fast.writeToStream(response, data);
+	fast.writeToStream(response, data
+  , {
+    transform: function(row) {
+      row.received_on = moment(row.received_on).tz(timezone).format();
+      row.receivedAt = moment(row.receivedAt).tz(timezone).format();
+      row.timestamp = moment(row.timestamp).tz(timezone).format();
+      return row
+    }
+    }
+  );
 }
 
 // start the server
