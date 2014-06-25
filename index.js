@@ -18,6 +18,10 @@ var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mong
 var collections = ['alias', 'identify', 'page', 'track'];
 var db = mongojs(url, collections);
 
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jade')
+app.use('/javascript', express.static(__dirname + '/javascript'));
+
 // NOTE: TEMPORARY
 /*db.alias.remove( {} );
 db.identify.remove( {} );
@@ -58,23 +62,28 @@ app.post('/track', function (req, res) {
 
 // get requests (HTTP)
 app.get('/alias', function (req, res) {
-	respondWithHTML('html/alias_form.html', res);
+  res.render('csv_scope_form',
+  {title : 'Alias', target : '/alias'})
 });
 
 app.get('/identify', function (req, res) {
-	respondWithHTML('html/identify_form.html', res);
+  res.render('csv_scope_form',
+  {title : 'Identify', target : '/identify'})
 });
 
 app.get('/page', function (req, res) {
-	respondWithHTML('html/page_form.html', res);
+  res.render('csv_scope_form',
+  {title : 'Page', target : '/page'})
 });
 
 app.get('/track', function (req, res) {
-	respondWithHTML('html/track_form.html', res);
+  res.render('csv_scope_form',
+  {title : 'Track', target : '/track'})
 });
 
 app.get('/', function (req, res) {
-	respondWithHTML('html/main.html', res);
+  res.render('home',
+  {title : 'Home'})
 });
 
 // helper methods
@@ -109,19 +118,6 @@ function csvCallback (response) {
 function respondWithCSV (data, response) {
 	response.writeHead(200, {'Content-Type': 'text/csv'});
 	fast.writeToStream(response, data);
-}
-
-function respondWithHTML (filename, response) {
-	fs.readFile(filename, function (err, data) {
-		if (err) {
-			console.error(err)
-		} else {
-			response.writeHead(200, {'Content-Type': 'text/html',
-								'Content-Length': data.length });
-			response.write(data);
-			response.end();
-		}
-	});
 }
 
 // start the server
