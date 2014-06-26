@@ -15,9 +15,8 @@ app.use(connect.urlencoded());
 app.use(connect.multipart());
 
 // DB initialization
-var url = 'mongodb://heroku_app26443906:qjc89p63q5iicq4lqdnkmfehtb@ds033828.mongolab.com:33828/heroku_app26443906';
 var collections = ['alias', 'identify', 'page', 'track'];
-var db = mongojs(url, collections);
+var db = mongojs(process.env.MONGOLAB_URI, collections);
 
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
