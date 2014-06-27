@@ -68,6 +68,31 @@ app.post('/track', function (req, res) {
     csvCallback(res, req.body.timezone));
 });
 
+app.post('/reset', function (req, res) {
+  if (req.body.alias == 'on') {
+    console.log('Clearing alias');
+    db.alias.remove( {} );
+  }
+
+  if (req.body.identify == 'on') {
+    console.log('Clearing identify.');
+    db.identify.remove( {} );
+  }
+
+  if (req.body.page == 'on') {
+    console.log('Clearing page.');
+    db.page.remove( {} );
+  }
+
+  if (req.body.track == 'on') {
+    console.log('Clearing track.');
+    db.track.remove( {} );
+  }
+
+  res.render('reset_db_form',
+  {title: 'Reset', target : '/reset'})
+});
+
 // get requests (HTTP)
 app.get('/alias', function (req, res) {
   res.render('csv_scope_form',
@@ -88,6 +113,11 @@ app.get('/track', function (req, res) {
   res.render('csv_scope_form',
   {title : 'Track', target : '/track'})
 });
+
+app.get('/reset', function (req, res) {
+  res.render('reset_db_form',
+  {title: 'Reset', target : '/reset'})
+})
 
 app.get('/', function (req, res) {
   res.render('home',
