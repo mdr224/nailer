@@ -1,0 +1,15 @@
+extend layout
+block content
+  br
+  form(action="#{target}" method="post")
+    .control-group.col-xs-3.controls
+      label(for='alias') Alias
+      input(type='checkbox' name='alias', class='form-control')
+      label(for='identify') Identify
+      input(type='checkbox' name='identify', class='form-control')
+      label(for='page') Page
+      input(type='checkbox' name='page', class='form-control')
+      label(for='track') Track
+      input(type='checkbox' name='track', class='form-control')
+      br
+      input(type="submit" name="Submit" class="btn btn-primary")
